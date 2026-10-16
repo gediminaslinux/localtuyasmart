@@ -1,6 +1,6 @@
 {
-  "domain": "localtuya",
-  "name": "Local Tuya",
+  "domain": "localtuyasmarthome",
+  "name": "Local Tuya for smart home",
   "codeowners": [],
   "config_flow": true,
   "dependencies": [],
