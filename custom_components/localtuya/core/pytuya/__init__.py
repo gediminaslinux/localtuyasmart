@@ -129,7 +129,7 @@ NO_PROTOCOL_HEADER_CMDS = [
     CMDType.LAN_EXT_STREAM,
 ]
 
-HEARTBEAT_INTERVAL = 8.3
+HEARTBEAT_INTERVAL = 5
 TIMEOUT_CONNECT = 5
 TIMEOUT_REPLY = 5
 
@@ -670,11 +670,11 @@ class TuyaProtocol(asyncio.Protocol, ContextualLogger):
         except Exception:  # pylint: disable=broad-except
             self.exception("Failed to call disconnected callback")
 
-    async def transport_write(self, data):
+async def transport_write(self, data):
         """Write data on transport, ensure that no massive requests happen all at once."""
         async with self._write_lock:
-            while self.last_command_sent < 0.050:
-                await asyncio.sleep(0.010)
+            while self.last_command_sent < 0.020: # Reduced from 0.050 to 0.020
+                await asyncio.sleep(0.005)        # Reduced sleep interval
 
             self._last_command_sent = time.monotonic()
             self.transport.write(data)
