@@ -670,11 +670,11 @@ class TuyaProtocol(asyncio.Protocol, ContextualLogger):
         except Exception:  # pylint: disable=broad-except
             self.exception("Failed to call disconnected callback")
 
-async def transport_write(self, data):
+    async def transport_write(self, data):
         """Write data on transport, ensure that no massive requests happen all at once."""
         async with self._write_lock:
-            while self.last_command_sent < 0.020: # Reduced from 0.050 to 0.020
-                await asyncio.sleep(0.005)        # Reduced sleep interval
+            while self.last_command_sent < 0.050:
+                await asyncio.sleep(0.010)
 
             self._last_command_sent = time.monotonic()
             self.transport.write(data)
